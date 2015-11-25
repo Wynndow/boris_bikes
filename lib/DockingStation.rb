@@ -10,7 +10,7 @@ class DockingStation
 
   def release_bike
     fail 'No bikes available!' if empty?
-    @bikes.pop
+    bikes.pop
   end
 
   def dock(bike)
