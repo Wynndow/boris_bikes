@@ -1,4 +1,5 @@
 require 'DockingStation'
+require 'Bike'
 
 describe DockingStation do
 
@@ -10,6 +11,14 @@ describe DockingStation do
             subject.dock(bike)
             expect(bike).to be_working
           end
+
+          it 'does not release broken bikes' do
+            bike = Bike.new
+            bike.broken?
+            expect {subject.release_bike}.to raise_error
+
+          end
+
         end
 
     describe '#empty?' do
@@ -24,6 +33,7 @@ describe DockingStation do
           subject.dock(bike)
           expect(subject.release_bike).to eq bike
         end
+
       end
 
     describe '#full?' do
@@ -35,8 +45,9 @@ describe DockingStation do
 
     describe '#initialize' do
       it 'allows capacity to be set' do
-      capacity = 20
-        expect {DockingStation.new(capacity)}.not_to raise_error
+      docking_station = DockingStation.new(50)
+      50.times { docking_station.dock Bike.new }
+        expect { docking_station.dock Bike.new }.to raise_error
       end
 
 

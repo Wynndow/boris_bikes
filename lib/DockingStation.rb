@@ -22,6 +22,8 @@ class DockingStation
     bikes << bike
   end
 
+  
+
 private
 
 attr_accessor :bikes
