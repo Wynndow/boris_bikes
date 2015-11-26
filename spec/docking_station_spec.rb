@@ -6,16 +6,17 @@ describe DockingStation do
     describe '#release_bike' do
           it { is_expected.to respond_to :release_bike }
 
+          #let(:bike) {double :bike}
           it 'gets a bike and expects to be working' do
-          subject.dock Bike.new
-          bike = subject.release_bike
-          expect(bike).to be_working
+            bike = double(:bike, broken?: false, working?: true)
+            #allow(bike).to receive(:working?).and_return(true)
+            subject.dock bike
+            expect(subject.release_bike).to eq bike
           end
 
           it 'does not release broken bikes' do
-            bike = Bike.new
-            bike.report_broken
-            subject.dock(bike)
+            bike = double(:bike, broken?: true)
+            subject.dock bike
             expect {subject.release_bike}.to raise_error
           end
 
@@ -28,8 +29,10 @@ describe DockingStation do
     end
 
     describe '#dock' do
+
+      #let(:bike) {double :bike}
         it 'allows a bike to be docked' do
-          bike = Bike.new
+          bike = double(:bike, dock: true, broken?: false, working?: true)
           subject.dock(bike)
           expect(subject.release_bike).to eq bike
         end
@@ -38,21 +41,20 @@ describe DockingStation do
 
     describe '#full?' do
         it 'raises an error if the dock is full' do
-          subject.capacity.times {subject.dock(Bike.new)}
-          expect {subject.dock(Bike.new)}.to raise_error 'Dock is already full'
+          subject.capacity.times {subject.dock double :bike }
+          expect {subject.dock(:bike)}.to raise_error 'Dock is already full'
         end
     end
 
-    describe '#initialize' do
+
       it 'allows capacity to be set' do
-      docking_station = DockingStation.new(50)
-      50.times { docking_station.dock Bike.new }
-        expect { docking_station.dock Bike.new }.to raise_error
+        docking_station = DockingStation.new(50)
+        expect(docking_station.capacity).to eq 50
       end
 
 
       it 'it sets a default cacpacity' do
         expect(subject.capacity).to eq DockingStation::DEFAULT_CAPACITY
-      end
+
       end
 end
