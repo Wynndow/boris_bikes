@@ -7,19 +7,19 @@ describe DockingStation do
           it { is_expected.to respond_to :release_bike }
 
           it 'gets a bike and expects to be working' do
-            bike = Bike.new
-            subject.dock(bike)
-            expect(bike).to be_working
+          subject.dock Bike.new
+          bike = subject.release_bike
+          expect(bike).to be_working
           end
 
           it 'does not release broken bikes' do
             bike = Bike.new
-            bike.broken?
+            bike.report_broken
+            subject.dock(bike)
             expect {subject.release_bike}.to raise_error
-
           end
 
-        end
+      end
 
     describe '#empty?' do
         it 'raises exception when no bikes' do

@@ -14,6 +14,7 @@ class DockingStation
 
   def release_bike
     fail 'No bikes available!' if empty?
+    fail 'Bike is broken' if bikes.last.broken?
     bikes.pop
   end
 
@@ -22,7 +23,7 @@ class DockingStation
     bikes << bike
   end
 
-  
+
 
 private
 
