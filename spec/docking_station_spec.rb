@@ -21,6 +21,16 @@ describe DockingStation do
           end
 
       end
+      describe '#release_broken_bike' do
+        it { is_expected.to respond_to  :release_broken_bike }
+
+
+        it 'raises exception when no broken bikes' do
+          bike = double(:bike, working?: false)
+          subject.dock(bike)
+          expect { subject.release_broken_bike }.to raise_error
+      end
+    end
 
     describe '#empty?' do
         it 'raises exception when no bikes' do
@@ -32,7 +42,7 @@ describe DockingStation do
 
       #let(:bike) {double :bike}
         it 'allows a bike to be docked' do
-          bike = double(:bike, dock: true, broken?: false, working?: true)
+          bike = double(:bike, broken?: false, working?: true)
           subject.dock(bike)
           expect(subject.release_bike).to eq bike
         end
